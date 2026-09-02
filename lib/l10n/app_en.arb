@@ -1,0 +1,7 @@
+{
+  "@@locale": "en",
+  "appName": "Nawa",
+  "@appName": {
+    "description": "The application name, shown in the OS and app title."
+  }
+}
