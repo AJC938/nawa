@@ -1,7 +1,180 @@
 {
   "@@locale": "en",
   "appName": "Nawa",
-  "@appName": {
-    "description": "The application name, shown in the OS and app title."
-  }
+  "@appName": { "description": "The application name, shown in the OS and app title." },
+
+  "continueLabel": "Continue",
+  "startExploring": "Start Exploring",
+  "iHaveAnAccount": "I have an account",
+  "seeAll": "See all",
+  "tryAgain": "Try Again",
+  "back": "Back",
+
+  "navHome": "Home",
+  "navExplore": "Explore",
+  "navProfile": "Profile",
+  "navParent": "Parent",
+
+  "welcomeHeading": "Discover what you love",
+  "welcomeSubtitle": "Explore, play and discover new things every day.",
+
+  "onboardingIntroTitle": "Welcome to Nawa!",
+  "onboardingIntroSubtitle": "Nawa is your space to explore what you enjoy and discover amazing things.",
+
+  "onboardingNameTitle": "What should we call you?",
+  "onboardingNameSubtitle": "Tell us your name",
+  "onboardingNameHint": "Enter your name",
+
+  "onboardingAgeTitle": "How old are you?",
+  "onboardingAgeSubtitle": "Select your age",
+  "age13Plus": "13+",
+
+  "onboardingInterestsIntroTitle": "Let's discover what you enjoy.",
+  "onboardingInterestsIntroBody": "We'll show you fun experiences based on what excites you most.",
+
+  "onboardingInterestsTitle": "What are you interested in?",
+  "onboardingInterestsSubtitle": "You can choose more than one",
+
+  "onboardingCompleteTitle": "You're all set!",
+  "onboardingCompleteSubtitle": "Let's start exploring things you'll love.",
+
+  "loginTitle": "Log in",
+  "loginSubtitle": "Welcome back!",
+  "emailLabel": "Email",
+  "emailHint": "Enter your email",
+  "passwordLabel": "Password",
+  "passwordHint": "Enter your password",
+  "forgotPassword": "Forgot password?",
+  "loginButton": "Log in",
+  "noAccountPrompt": "Don't have an account?",
+  "signUp": "Sign up",
+  "orContinueWith": "or continue with",
+  "comingSoon": "Coming soon!",
+  "fieldRequired": "This field is required.",
+
+  "authErrorInvalidCredential": "The email or password is incorrect.",
+  "authErrorInvalidEmail": "Please enter a valid email address.",
+  "authErrorEmailInUse": "An account already exists with this email.",
+  "authErrorWeakPassword": "Please choose a stronger password (at least 6 characters).",
+  "authErrorTooManyRequests": "Too many attempts. Please wait a moment and try again.",
+  "authErrorNetwork": "Network error. Please check your connection and try again.",
+  "authErrorGeneric": "Something went wrong. Please try again.",
+
+  "signupTitle": "Create account",
+  "signupSubtitle": "Create your parent account",
+  "nameLabel": "Name",
+  "nameHint": "Enter your name",
+  "createPasswordHint": "Create password",
+  "agreeTerms": "I agree to the Terms & Privacy Policy",
+  "createAccountButton": "Create account",
+  "alreadyHaveAccountPrompt": "Already have an account?",
+  "logIn": "Log in",
+
+  "accountCreatedTitle": "Account created!",
+  "accountCreatedSubtitle": "You're ready to start exploring Nawa with your child.",
+  "goToDashboard": "Go to Dashboard",
+
+  "homeGreeting": "Hi, {name}!",
+  "@homeGreeting": { "placeholders": { "name": { "type": "String" } } },
+  "homeSubtitle": "Ready to explore today?",
+  "continueExploring": "Continue Exploring",
+  "recommendedForYou": "Recommended for you",
+  "yourInterests": "Your Interests",
+
+  "exploreTitle": "Explore",
+  "searchHint": "Search experiences...",
+  "filterAll": "All",
+  "featured": "Featured",
+  "categoriesLabel": "Categories",
+
+  "experienceCount": "{count, plural, one {{count} Experience} other {{count} Experiences}}",
+  "@experienceCount": { "placeholders": { "count": { "type": "int" } } },
+
+  "youWillExplore": "You will explore:",
+  "startExperience": "Start Experience",
+
+  "questionProgress": "{current}/{total}",
+  "@questionProgress": { "placeholders": { "current": { "type": "int" }, "total": { "type": "int" } } },
+  "positiveFeedback": "Nice choice!",
+  "tryAgainFeedback": "Let's try a different path!",
+
+  "experienceCompleteTitle": "Great job!",
+  "experienceCompleteSubtitle": "You completed {title}",
+  "@experienceCompleteSubtitle": { "placeholders": { "title": { "type": "String" } } },
+  "youExplored": "You explored:",
+  "exploreMore": "Explore More",
+  "viewMyInterests": "View My Interests",
+
+  "myInterestsTitle": "My Interests",
+  "myInterestsSubtitle": "Your exploration so far",
+
+  "completedExperiencesLabel": "Experiences Completed",
+  "nextExperience": "Next Experience",
+  "relatedInterests": "Related Interests",
+
+  "discoverTitle": "Discover More",
+  "discoverSubtitle": "Based on what you enjoy",
+
+  "profileExperiences": "Experiences",
+  "profileInterests": "Interests",
+  "profileStreak": "{days} Day Streak",
+  "@profileStreak": { "placeholders": { "days": { "type": "int" } } },
+  "myBadges": "My Badges",
+  "history": "History",
+  "editProfile": "Edit",
+  "yearsOld": "{age} years old",
+  "@yearsOld": { "placeholders": { "age": { "type": "int" } } },
+
+  "parentOverviewTitle": "{name}'s Overview",
+  "@parentOverviewTitle": { "placeholders": { "name": { "type": "String" } } },
+  "parentOverviewSubtitle": "Here's how {name} is exploring",
+  "@parentOverviewSubtitle": { "placeholders": { "name": { "type": "String" } } },
+  "thisWeek": "This Week",
+  "topInterests": "Top Interests",
+  "timeSpentExploring": "Time Spent Exploring",
+
+  "emergingInterestsTitle": "Emerging Interests",
+  "emergingInterestsSubtitle": "Based on exploration",
+
+  "whyLabel": "Why?",
+  "suggestedNext": "Suggested Next",
+  "parentWhyGeneric": "{name} is just starting to explore {category}.",
+  "@parentWhyGeneric": { "placeholders": { "name": { "type": "String" }, "category": { "type": "String" } } },
+  "parentWhyDetailed": "{name} shows curiosity in {category} and enjoys {concepts}.",
+  "@parentWhyDetailed": { "placeholders": { "name": { "type": "String" }, "category": { "type": "String" }, "concepts": { "type": "String" } } },
+  "searchResults": "Results",
+
+  "settingsTitle": "Settings",
+  "settingsProfile": "Profile",
+  "settingsChildProfiles": "Child Profiles",
+  "settingsLanguage": "Language",
+  "settingsNotifications": "Notifications",
+  "settingsPrivacySafety": "Privacy & Safety",
+  "settingsHelpSupport": "Help & Support",
+  "settingsAboutNawa": "About Nawa",
+  "settingsLogout": "Log out",
+  "languageEnglish": "English",
+  "languageArabic": "Arabic",
+
+  "emptyExperiencesTitle": "No experiences yet.",
+  "emptyExperiencesSubtitle": "Start exploring and we'll show you amazing things to try!",
+  "exploreNow": "Explore Now",
+
+  "loadingTitle": "Loading...",
+  "loadingSubtitle": "Preparing something fun for you",
+
+  "errorTitle": "Oops!",
+  "errorMessage": "Something went wrong. Please try again.",
+
+  "categoryGaming": "Gaming",
+  "categorySports": "Sports",
+  "categoryArt": "Art & Drawing",
+  "categoryTechnology": "Technology",
+  "categoryScience": "Science & Discovery",
+
+  "interestLevelEmerging": "Emerging",
+  "interestLevelExploring": "Exploring",
+  "interestLevelStrongChild": "Strong Interest",
+  "interestLevelStrong": "Strong",
+  "interestLevelVeryStrong": "Very Strong"
 }

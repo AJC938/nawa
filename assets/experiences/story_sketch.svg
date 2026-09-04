@@ -1,0 +1,21 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#FFF1EF"/>
+  <path d="M50 60 l5 8 9 4 -9 4 -5 8 -5 -8 -9 -4 9 -4 z" fill="#FFD65A"/>
+  <path d="M330 90 l4 6 6 3 -6 3 -4 6 -4 -6 -6 -3 6 -3 z" fill="#55D6BE"/>
+  <!-- open book -->
+  <g transform="translate(200 190)">
+    <path d="M0 -70 C-50 -85 -95 -75 -95 -75 L-95 65 C-95 65 -50 55 0 70 Z" fill="#FFFFFF" stroke="#E9C9BE" stroke-width="4"/>
+    <path d="M0 -70 C50 -85 95 -75 95 -75 L95 65 C95 65 50 55 0 70 Z" fill="#FDFBF8" stroke="#E9C9BE" stroke-width="4"/>
+    <path d="M-70 -50 h-15 M-72 -32 h-13 M-74 -14 h-11" stroke="#DCC7BC" stroke-width="4" stroke-linecap="round"/>
+    <!-- sketch scene on right page -->
+    <path d="M15 -30 q20 -30 45 -10" fill="none" stroke="#4F7CFF" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="70" cy="-42" r="10" fill="#FFD65A"/>
+    <path d="M20 10 q30 20 55 -4" fill="none" stroke="#EF4444" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <!-- pencil -->
+  <g transform="translate(300 250) rotate(-40)">
+    <rect x="-8" y="-70" width="16" height="70" rx="3" fill="#FFD65A"/>
+    <path d="M-8 -70 l8 -16 8 16 z" fill="#F5DFC0"/>
+    <path d="M-2 -86 l2 -6 2 6 z" fill="#172033"/>
+  </g>
+</svg>

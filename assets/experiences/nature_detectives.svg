@@ -1,0 +1,21 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#EAFBF3"/>
+  <path d="M0 250 q100 -30 200 0 t200 0 v50 h-400 z" fill="#CDEFDD"/>
+  <!-- leaf -->
+  <g transform="translate(180 150) rotate(-18)">
+    <path d="M0 -70 C55 -70 70 -10 0 70 C-70 -10 -55 -70 0 -70 Z" fill="#55D6BE"/>
+    <path d="M0 -60 v120" stroke="#2FAF95" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <!-- magnifying glass -->
+  <g transform="translate(215 130)">
+    <circle r="46" fill="#F1F5FF" opacity="0.35" stroke="#172033" stroke-width="8"/>
+    <line x1="33" y1="33" x2="70" y2="70" stroke="#172033" stroke-width="10" stroke-linecap="round"/>
+  </g>
+  <!-- bird -->
+  <g transform="translate(310 70)">
+    <path d="M0 0 q20 -14 34 0 q-10 4 -14 10 q10 2 16 10 q-16 -2 -22 -6 q-8 6 -18 4 q10 -6 12 -14 q-6 -2 -8 -4 z" fill="#FFD65A"/>
+    <path d="M34 0 l10 -6 -4 10 z" fill="#F5A623"/>
+  </g>
+  <path d="M60 240 q6 -30 0 -50" stroke="#3C9A6E" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M330 245 q-6 -24 2 -40" stroke="#3C9A6E" stroke-width="5" stroke-linecap="round" fill="none"/>
+</svg>

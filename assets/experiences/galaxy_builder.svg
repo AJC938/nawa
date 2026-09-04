@@ -1,0 +1,27 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="400" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2B3568"/>
+      <stop offset="1" stop-color="#161D3A"/>
+    </linearGradient>
+    <linearGradient id="planet" x1="150" y1="90" x2="260" y2="230" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7C9BFF"/>
+      <stop offset="1" stop-color="#4F7CFF"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <circle cx="70" cy="60" r="3" fill="#FFFFFF"/>
+  <circle cx="330" cy="50" r="2.5" fill="#FFFFFF"/>
+  <circle cx="350" cy="220" r="2" fill="#FFFFFF"/>
+  <circle cx="60" cy="200" r="2" fill="#FFFFFF"/>
+  <circle cx="290" cy="90" r="2" fill="#55D6BE"/>
+  <path d="M100 40 l4 9 9 4 -9 4 -4 9 -4 -9 -9 -4 9 -4 z" fill="#FFD65A"/>
+  <circle cx="60" cy="120" r="18" fill="#55D6BE" opacity="0.85"/>
+  <path d="M50 112 a18 18 0 1 0 8 -6" fill="#161D3A" opacity="0.35"/>
+  <ellipse cx="205" cy="165" rx="95" ry="24" fill="none" stroke="#FFD65A" stroke-width="7" opacity="0.9"/>
+  <circle cx="205" cy="160" r="58" fill="url(#planet)"/>
+  <path d="M150 140 a58 58 0 0 0 8 55" fill="none" stroke="#3F6EF5" stroke-width="10" opacity="0.5"/>
+  <ellipse cx="205" cy="165" rx="95" ry="24" fill="none" stroke="#FFE485" stroke-width="3"/>
+  <rect x="290" y="205" width="26" height="26" rx="6" fill="#FFD65A" transform="rotate(18 303 218)"/>
+  <rect x="292" y="207" width="22" height="10" rx="3" fill="#F5C33E" transform="rotate(18 303 218)"/>
+</svg>

@@ -1,0 +1,26 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#FFF4E2"/>
+  <path d="M0 250 h400 v50 h-400 z" fill="#B9E6A8"/>
+  <!-- goal -->
+  <g transform="translate(255 90)" opacity="0.9">
+    <rect x="0" y="0" width="110" height="80" fill="none" stroke="#94A3B8" stroke-width="6"/>
+    <g stroke="#C7D6E5" stroke-width="2">
+      <line x1="0" y1="20" x2="110" y2="20"/>
+      <line x1="0" y1="40" x2="110" y2="40"/>
+      <line x1="0" y1="60" x2="110" y2="60"/>
+      <line x1="22" y1="0" x2="22" y2="80"/>
+      <line x1="55" y1="0" x2="55" y2="80"/>
+      <line x1="88" y1="0" x2="88" y2="80"/>
+    </g>
+  </g>
+  <!-- motion arcs -->
+  <path d="M70 210 q30 -10 55 -2" fill="none" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+  <path d="M60 225 q35 -14 68 -3" fill="none" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" opacity="0.35"/>
+  <!-- ball -->
+  <g transform="translate(165 205)">
+    <circle r="30" fill="#F1F5FF" stroke="#172033" stroke-width="3"/>
+    <polygon points="0,-13 12,-4 7,11 -7,11 -12,-4" fill="#172033"/>
+    <path d="M0 -30 l0 -17 M26 -15 l14 -10 M26 15 l16 6 M-26 -15 l-14 -10 M-26 15 l-16 6"
+          stroke="#172033" stroke-width="3" opacity="0.5"/>
+  </g>
+</svg>

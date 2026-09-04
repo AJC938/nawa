@@ -1,0 +1,28 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#E7FBF6"/>
+  <rect x="60" y="220" width="280" height="8" rx="4" fill="#B9EFE2"/>
+  <!-- small tube -->
+  <g transform="translate(120 130)">
+    <path d="M-10 0 h20 v70 a10 10 0 0 1 -20 0 z" fill="#F1F5FF" stroke="#C7D6FF" stroke-width="3"/>
+    <path d="M-10 40 h20 v30 a10 10 0 0 1 -20 0 z" fill="#FFD65A"/>
+    <rect x="-13" y="-8" width="26" height="8" rx="2" fill="#C7D6FF"/>
+  </g>
+  <!-- small tube 2 -->
+  <g transform="translate(280 145)">
+    <path d="M-10 0 h20 v55 a10 10 0 0 1 -20 0 z" fill="#F1F5FF" stroke="#C7D6FF" stroke-width="3"/>
+    <path d="M-10 25 h20 v30 a10 10 0 0 1 -20 0 z" fill="#4F7CFF"/>
+    <rect x="-13" y="-8" width="26" height="8" rx="2" fill="#C7D6FF"/>
+  </g>
+  <!-- flask -->
+  <g transform="translate(200 90)">
+    <path d="M-10 0 h20 v28 l30 60 a14 14 0 0 1 -13 20 h-54 a14 14 0 0 1 -13 -20 l30 -60 z" fill="#F1F5FF" stroke="#C7D6FF" stroke-width="4"/>
+    <path d="M-40 90 a14 14 0 0 0 13 18 h54 a14 14 0 0 0 13 -18 z" fill="#55D6BE"/>
+    <rect x="-13" y="-8" width="26" height="8" rx="2" fill="#C7D6FF"/>
+    <circle cx="-8" cy="82" r="5" fill="#BFF3E7"/>
+    <circle cx="14" cy="92" r="4" fill="#BFF3E7"/>
+    <circle cx="2" cy="70" r="3" fill="#BFF3E7"/>
+  </g>
+  <circle cx="90" cy="80" r="3" fill="#55D6BE" opacity="0.6"/>
+  <circle cx="320" cy="90" r="4" fill="#4F7CFF" opacity="0.5"/>
+  <circle cx="60" cy="150" r="2.5" fill="#FFD65A" opacity="0.8"/>
+</svg>

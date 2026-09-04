@@ -1,4 +1,169 @@
 {
   "@@locale": "ar",
-  "appName": "نوى"
+  "appName": "نوى",
+
+  "continueLabel": "متابعة",
+  "startExploring": "ابدأ الاستكشاف",
+  "iHaveAnAccount": "لدي حساب بالفعل",
+  "seeAll": "عرض الكل",
+  "tryAgain": "حاول مرة أخرى",
+  "back": "رجوع",
+
+  "navHome": "الرئيسية",
+  "navExplore": "استكشف",
+  "navProfile": "الملف الشخصي",
+  "navParent": "ولي الأمر",
+
+  "welcomeHeading": "اكتشف ما تحب",
+  "welcomeSubtitle": "استكشف والعب واكتشف أشياء جديدة كل يوم.",
+
+  "onboardingIntroTitle": "مرحبًا بك في نوى!",
+  "onboardingIntroSubtitle": "نوى هو مساحتك لاستكشاف ما تحبه واكتشاف أشياء رائعة.",
+
+  "onboardingNameTitle": "ماذا نناديك؟",
+  "onboardingNameSubtitle": "أخبرنا باسمك",
+  "onboardingNameHint": "أدخل اسمك",
+
+  "onboardingAgeTitle": "كم عمرك؟",
+  "onboardingAgeSubtitle": "اختر عمرك",
+  "age13Plus": "+13",
+
+  "onboardingInterestsIntroTitle": "لنكتشف ما يثير اهتمامك.",
+  "onboardingInterestsIntroBody": "سنعرض لك تجارب ممتعة بناءً على ما يثير حماسك أكثر.",
+
+  "onboardingInterestsTitle": "بماذا تهتم؟",
+  "onboardingInterestsSubtitle": "يمكنك اختيار أكثر من واحد",
+
+  "onboardingCompleteTitle": "كل شيء جاهز!",
+  "onboardingCompleteSubtitle": "لنبدأ استكشاف الأشياء التي ستحبها.",
+
+  "loginTitle": "تسجيل الدخول",
+  "loginSubtitle": "مرحبًا بعودتك!",
+  "emailLabel": "البريد الإلكتروني",
+  "emailHint": "أدخل بريدك الإلكتروني",
+  "passwordLabel": "كلمة المرور",
+  "passwordHint": "أدخل كلمة المرور",
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "loginButton": "تسجيل الدخول",
+  "noAccountPrompt": "ليس لديك حساب؟",
+  "signUp": "إنشاء حساب",
+  "orContinueWith": "أو تابع باستخدام",
+  "comingSoon": "قريبًا!",
+  "fieldRequired": "هذا الحقل مطلوب.",
+
+  "authErrorInvalidCredential": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+  "authErrorInvalidEmail": "يرجى إدخال بريد إلكتروني صحيح.",
+  "authErrorEmailInUse": "يوجد حساب مسجل بهذا البريد الإلكتروني بالفعل.",
+  "authErrorWeakPassword": "يرجى اختيار كلمة مرور أقوى (6 أحرف على الأقل).",
+  "authErrorTooManyRequests": "محاولات كثيرة جدًا. يرجى الانتظار قليلاً ثم المحاولة مرة أخرى.",
+  "authErrorNetwork": "خطأ في الشبكة. يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
+  "authErrorGeneric": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+
+  "signupTitle": "إنشاء حساب",
+  "signupSubtitle": "أنشئ حساب ولي الأمر الخاص بك",
+  "nameLabel": "الاسم",
+  "nameHint": "أدخل اسمك",
+  "createPasswordHint": "أنشئ كلمة مرور",
+  "agreeTerms": "أوافق على الشروط وسياسة الخصوصية",
+  "createAccountButton": "إنشاء حساب",
+  "alreadyHaveAccountPrompt": "لديك حساب بالفعل؟",
+  "logIn": "تسجيل الدخول",
+
+  "accountCreatedTitle": "تم إنشاء الحساب!",
+  "accountCreatedSubtitle": "أنت جاهز لبدء استكشاف نوى مع طفلك.",
+  "goToDashboard": "الذهاب إلى لوحة التحكم",
+
+  "homeGreeting": "مرحبًا، {name}!",
+  "homeSubtitle": "هل أنت مستعد للاستكشاف اليوم؟",
+  "continueExploring": "تابع الاستكشاف",
+  "recommendedForYou": "موصى به لك",
+  "yourInterests": "اهتماماتك",
+
+  "exploreTitle": "استكشف",
+  "searchHint": "ابحث عن تجارب...",
+  "filterAll": "الكل",
+  "featured": "مميز",
+  "categoriesLabel": "الفئات",
+
+  "experienceCount": "{count, plural, one {{count} تجربة} other {{count} تجارب}}",
+
+  "youWillExplore": "ستستكشف:",
+  "startExperience": "ابدأ التجربة",
+
+  "questionProgress": "{current}/{total}",
+  "positiveFeedback": "اختيار رائع!",
+  "tryAgainFeedback": "لنجرب مسارًا مختلفًا!",
+
+  "experienceCompleteTitle": "أحسنت!",
+  "experienceCompleteSubtitle": "لقد أكملت {title}",
+  "youExplored": "لقد استكشفت:",
+  "exploreMore": "استكشف المزيد",
+  "viewMyInterests": "عرض اهتماماتي",
+
+  "myInterestsTitle": "اهتماماتي",
+  "myInterestsSubtitle": "رحلة استكشافك حتى الآن",
+
+  "completedExperiencesLabel": "التجارب المكتملة",
+  "nextExperience": "التجربة التالية",
+  "relatedInterests": "اهتمامات ذات صلة",
+
+  "discoverTitle": "اكتشف المزيد",
+  "discoverSubtitle": "بناءً على ما تحبه",
+
+  "profileExperiences": "التجارب",
+  "profileInterests": "الاهتمامات",
+  "profileStreak": "{days} يوم متتالي",
+  "myBadges": "أوسمتي",
+  "history": "السجل",
+  "editProfile": "تعديل",
+  "yearsOld": "{age} سنوات",
+
+  "parentOverviewTitle": "نظرة عامة على {name}",
+  "parentOverviewSubtitle": "هكذا يستكشف {name}",
+  "thisWeek": "هذا الأسبوع",
+  "topInterests": "أبرز الاهتمامات",
+  "timeSpentExploring": "الوقت المستغرق في الاستكشاف",
+
+  "emergingInterestsTitle": "اهتمامات ناشئة",
+  "emergingInterestsSubtitle": "بناءً على الاستكشاف",
+
+  "whyLabel": "لماذا؟",
+  "suggestedNext": "المقترح التالي",
+  "parentWhyGeneric": "بدأ {name} للتو في استكشاف {category}.",
+  "parentWhyDetailed": "يُظهر {name} فضولًا تجاه {category} ويستمتع بـ {concepts}.",
+  "searchResults": "النتائج",
+
+  "settingsTitle": "الإعدادات",
+  "settingsProfile": "الملف الشخصي",
+  "settingsChildProfiles": "ملفات الأطفال",
+  "settingsLanguage": "اللغة",
+  "settingsNotifications": "الإشعارات",
+  "settingsPrivacySafety": "الخصوصية والأمان",
+  "settingsHelpSupport": "المساعدة والدعم",
+  "settingsAboutNawa": "عن نوى",
+  "settingsLogout": "تسجيل الخروج",
+  "languageEnglish": "الإنجليزية",
+  "languageArabic": "العربية",
+
+  "emptyExperiencesTitle": "لا توجد تجارب بعد.",
+  "emptyExperiencesSubtitle": "ابدأ الاستكشاف وسنعرض لك أشياء رائعة لتجربتها!",
+  "exploreNow": "استكشف الآن",
+
+  "loadingTitle": "جارٍ التحميل...",
+  "loadingSubtitle": "نجهز لك شيئًا ممتعًا",
+
+  "errorTitle": "عذرًا!",
+  "errorMessage": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+
+  "categoryGaming": "الألعاب",
+  "categorySports": "الرياضة",
+  "categoryArt": "الفن والرسم",
+  "categoryTechnology": "التقنية",
+  "categoryScience": "العلوم والاكتشاف",
+
+  "interestLevelEmerging": "ناشئ",
+  "interestLevelExploring": "استكشاف",
+  "interestLevelStrongChild": "اهتمام قوي",
+  "interestLevelStrong": "قوي",
+  "interestLevelVeryStrong": "قوي جدًا"
 }

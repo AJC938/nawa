@@ -1,0 +1,25 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#FFF1EF"/>
+  <!-- easel legs -->
+  <path d="M150 260 l50 -160 M270 260 l-50 -160 M175 200 h60" stroke="#B08968" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <!-- canvas -->
+  <rect x="130" y="60" width="150" height="120" rx="6" fill="#FFFFFF" stroke="#E9C9BE" stroke-width="6"/>
+  <path d="M150 160 q30 -60 55 -20 q20 -50 60 10" fill="none" stroke="#4F7CFF" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="170" cy="95" r="14" fill="#FFD65A"/>
+  <circle cx="230" cy="85" r="10" fill="#55D6BE"/>
+  <circle cx="255" cy="120" r="9" fill="#EF4444" opacity="0.85"/>
+  <!-- palette -->
+  <g transform="translate(80 210)">
+    <path d="M0 0 a40 30 0 1 0 40 -30 a10 10 0 0 1 -10 -14 a40 30 0 0 0 -30 44 z" fill="#F5DFC0"/>
+    <circle cx="-16" cy="-6" r="6" fill="#EF4444"/>
+    <circle cx="0" cy="-14" r="6" fill="#4F7CFF"/>
+    <circle cx="16" cy="-6" r="6" fill="#FFD65A"/>
+    <circle cx="10" cy="8" r="6" fill="#55D6BE"/>
+  </g>
+  <!-- brush -->
+  <g transform="translate(300 205) rotate(35)">
+    <rect x="-5" y="-50" width="10" height="60" rx="4" fill="#B08968"/>
+    <path d="M-6 -50 q6 -18 12 0 q-6 8 -12 0 z" fill="#94A3B8"/>
+    <path d="M-4 -66 q4 -10 8 0 z" fill="#EF4444"/>
+  </g>
+</svg>

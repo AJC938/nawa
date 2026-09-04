@@ -1,0 +1,22 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#FFF4E2"/>
+  <path d="M0 250 h400 v50 h-400 z" fill="#F6D9A5"/>
+  <!-- hurdle -->
+  <g transform="translate(275 190)">
+    <rect x="-4" y="0" width="8" height="55" rx="3" fill="#94A3B8"/>
+    <rect x="60" y="0" width="8" height="55" rx="3" fill="#94A3B8"/>
+    <rect x="-10" y="6" width="84" height="10" rx="4" fill="#F59E0B"/>
+    <rect x="-10" y="26" width="84" height="10" rx="4" fill="#FFD65A"/>
+  </g>
+  <!-- motion lines -->
+  <path d="M40 200 h50 M55 215 h45 M70 230 h35" stroke="#94A3B8" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+  <!-- runner -->
+  <g transform="translate(160 150)">
+    <circle cx="30" cy="-40" r="16" fill="#FFD65A"/>
+    <path d="M30 -24 q-4 24 4 40" stroke="#4F7CFF" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <path d="M34 -14 q26 -8 40 -30" stroke="#4F7CFF" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <path d="M34 -2 q-30 4 -46 -22" stroke="#3F6EF5" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <path d="M34 16 q30 6 46 -10" stroke="#172033" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <path d="M34 16 q-8 34 4 56" stroke="#172033" stroke-width="9" stroke-linecap="round" fill="none"/>
+  </g>
+</svg>

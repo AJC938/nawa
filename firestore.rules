@@ -1,0 +1,19 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // MVP: a parent may only read/write their own user + child profile
+    // document, keyed by their Firebase Auth UID. No public access.
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // A parent may only read/write their own child's exploration
+      // (experience session) records, same ownership model as the parent doc.
+      match /explorations/{explorationId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // Everything else is denied by default (no matching rule = no access).
+  }
+}
