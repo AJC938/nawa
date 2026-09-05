@@ -7,7 +7,8 @@ import 'package:nawa/features/interests/presentation/state/interest_profile_cont
 import 'package:nawa/features/onboarding/domain/onboarding_state.dart';
 import 'package:nawa/features/onboarding/presentation/state/onboarding_controller.dart';
 import 'package:nawa/features/profile/data/user_profile_repository.dart';
-import 'package:nawa/features/profile/domain/child_profile_record.dart';
+import 'package:nawa/features/profile/domain/child_summary.dart';
+import 'package:nawa/features/profile/presentation/state/active_child_controller.dart';
 import 'package:nawa/features/profile/presentation/state/child_profile_controller.dart';
 
 import '../support/fake_auth_repository.dart';
@@ -26,6 +27,7 @@ void main() {
       container = ProviderContainer(overrides: [
         authRepositoryProvider.overrideWithValue(authRepository),
         userProfileRepositoryProvider.overrideWithValue(profileRepository),
+        explorationRepositoryProvider.overrideWithValue(FakeExplorationRepository()),
       ]);
     });
 
@@ -38,7 +40,7 @@ void main() {
       expect(container.read(onboardingProvider).syncStatus, OnboardingSyncStatus.idle);
     });
 
-    test('does not write an orphan profile when nobody is authenticated yet', () async {
+    test('does not write an orphan child when nobody is authenticated yet', () async {
       container.read(onboardingProvider.notifier)
         ..setName('Zayd')
         ..setAge(8)
@@ -50,7 +52,7 @@ void main() {
       expect(await profileRepository.getUserProfile('any-uid'), isNull);
     });
 
-    test('writes the parent + child profile under the authenticated UID once signed in', () async {
+    test('creates the parent profile and a new child under the authenticated UID once signed in', () async {
       final user = await authRepository.signIn(email: 'parent@nawa.app', password: 'secret1');
       container.read(onboardingProvider.notifier)
         ..setName('Zayd')
@@ -61,30 +63,24 @@ void main() {
       final ok = await container.read(onboardingProvider.notifier).syncToFirestoreIfNeeded();
 
       expect(ok, isTrue);
-      expect(container.read(onboardingProvider).syncStatus, OnboardingSyncStatus.synced);
+      // Fully resets after a successful sync (not left at "synced") so a
+      // later, unrelated login in the same app session never misreads this
+      // run's completed/synced flags as its own pending onboarding.
+      expect(container.read(onboardingProvider).completed, isFalse);
+      expect(container.read(onboardingProvider).syncStatus, OnboardingSyncStatus.idle);
 
       final savedUser = await profileRepository.getUserProfile(user.uid);
       expect(savedUser?.email, 'parent@nawa.app');
       expect(savedUser?.role, 'parent');
 
-      final savedChild = await profileRepository.getChildProfile(user.uid);
-      expect(savedChild?.name, 'Zayd');
-      expect(savedChild?.age, 8);
+      final children = await profileRepository.getChildren(user.uid);
+      expect(children, hasLength(1));
+      expect(children.single.name, 'Zayd');
+      expect(children.single.age, 8);
+      expect(children.single.interests, {InterestCategoryType.gaming});
 
-      final savedInterests = await profileRepository.getInterests(user.uid);
-      expect(savedInterests, {InterestCategoryType.gaming});
-    });
-
-    test('does not write orphan interests when nobody is authenticated yet', () async {
-      container.read(onboardingProvider.notifier)
-        ..setName('Zayd')
-        ..setAge(8)
-        ..toggleInterest(InterestCategoryType.gaming)
-        ..complete();
-
-      await container.read(onboardingProvider.notifier).syncToFirestoreIfNeeded();
-
-      expect(await profileRepository.getInterests('any-uid'), isEmpty);
+      // The new child becomes active immediately.
+      expect(container.read(activeChildIdProvider), children.single.id);
     });
 
     test('stores stable lowercase ids, not translated UI labels', () async {
@@ -97,15 +93,15 @@ void main() {
 
       await container.read(onboardingProvider.notifier).syncToFirestoreIfNeeded();
 
-      final saved = await profileRepository.getInterests(user.uid);
-      expect(saved, {InterestCategoryType.technology});
+      final children = await profileRepository.getChildren(user.uid);
+      expect(children.single.interests, {InterestCategoryType.technology});
       expect(InterestCategoryType.technology.id, 'technology');
       expect(interestCategoryFromId('technology'), InterestCategoryType.technology);
       expect(interestCategoryFromId('not-a-real-id'), isNull);
     });
 
     test('does not write a second time once already synced (no duplicate writes)', () async {
-      await authRepository.signIn(email: 'parent@nawa.app', password: 'secret1');
+      final user = await authRepository.signIn(email: 'parent@nawa.app', password: 'secret1');
       container.read(onboardingProvider.notifier)
         ..setName('Zayd')
         ..setAge(8)
@@ -113,10 +109,17 @@ void main() {
 
       final notifier = container.read(onboardingProvider.notifier);
       await notifier.syncToFirestoreIfNeeded();
+      // The state resets to fresh/idle immediately after a successful sync,
+      // so a second call sees "nothing pending" and correctly no-ops —
+      // exactly what stops a stale completed flag from re-syncing (or,
+      // worse, misleading a later unrelated login) rather than truly
+      // re-detecting "already synced".
       final secondCallOk = await notifier.syncToFirestoreIfNeeded();
 
       expect(secondCallOk, isTrue);
-      expect(container.read(onboardingProvider).syncStatus, OnboardingSyncStatus.synced);
+      // Still exactly one child — the second call was a genuine no-op, not
+      // a second createChild.
+      expect(await profileRepository.getChildren(user.uid), hasLength(1));
     });
 
     test('reports failure and sets an error status when the Firestore write throws', () async {
@@ -135,9 +138,9 @@ void main() {
   });
 
   group('ChildProfileController.restoreFromFirestore', () {
-    test('applies the saved name/age when a Firestore profile exists', () async {
+    test('applies the saved name/age when a Firestore child profile exists', () async {
       final profileRepository = FakeUserProfileRepository()
-        ..seedChildProfile('uid-1', const ChildProfileRecord(name: 'Lina', age: 6));
+        ..seedChild('uid-1', const ChildSummary(id: 'child-1', name: 'Lina', age: 6));
       final container = ProviderContainer(
         overrides: [
           userProfileRepositoryProvider.overrideWithValue(profileRepository),
@@ -146,7 +149,7 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      await container.read(childProfileProvider.notifier).restoreFromFirestore('uid-1');
+      await container.read(childProfileProvider.notifier).restoreFromFirestore(uid: 'uid-1', childId: 'child-1');
 
       final child = container.read(childProfileProvider);
       expect(child.name, 'Lina');
@@ -164,7 +167,7 @@ void main() {
       addTearDown(container.dispose);
 
       final before = container.read(childProfileProvider);
-      await container.read(childProfileProvider.notifier).restoreFromFirestore('uid-none');
+      await container.read(childProfileProvider.notifier).restoreFromFirestore(uid: 'uid-none', childId: 'child-none');
 
       expect(container.read(childProfileProvider).name, before.name);
       expect(container.read(childProfileProvider).age, before.age);
@@ -172,8 +175,10 @@ void main() {
 
     test('restores saved interests and replaces the local mock defaults', () async {
       final profileRepository = FakeUserProfileRepository()
-        ..seedChildProfile('uid-1', const ChildProfileRecord(name: 'Lina', age: 6))
-        ..seedInterests('uid-1', {InterestCategoryType.art, InterestCategoryType.science});
+        ..seedChild(
+          'uid-1',
+          const ChildSummary(id: 'child-1', name: 'Lina', age: 6, interests: {InterestCategoryType.art, InterestCategoryType.science}),
+        );
       final container = ProviderContainer(
         overrides: [
           userProfileRepositoryProvider.overrideWithValue(profileRepository),
@@ -186,7 +191,7 @@ void main() {
       // does NOT already contain art/science, so this proves a real overwrite.
       expect(container.read(childProfileProvider).interests, isNot(contains(InterestCategoryType.art)));
 
-      await container.read(childProfileProvider.notifier).restoreFromFirestore('uid-1');
+      await container.read(childProfileProvider.notifier).restoreFromFirestore(uid: 'uid-1', childId: 'child-1');
 
       expect(container.read(childProfileProvider).interests, {InterestCategoryType.art, InterestCategoryType.science});
     });
@@ -201,14 +206,14 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      await container.read(childProfileProvider.notifier).restoreFromFirestore('uid-none');
+      await container.read(childProfileProvider.notifier).restoreFromFirestore(uid: 'uid-none', childId: 'child-none');
 
       expect(container.read(childProfileProvider).interests, isEmpty);
     });
 
     test('re-seeds the interest scoring provider with the restored interests', () async {
       final profileRepository = FakeUserProfileRepository()
-        ..seedInterests('uid-1', {InterestCategoryType.sports});
+        ..seedChild('uid-1', const ChildSummary(id: 'child-1', name: 'Kid', age: 9, interests: {InterestCategoryType.sports}));
       final container = ProviderContainer(
         overrides: [
           userProfileRepositoryProvider.overrideWithValue(profileRepository),
@@ -217,7 +222,7 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      await container.read(childProfileProvider.notifier).restoreFromFirestore('uid-1');
+      await container.read(childProfileProvider.notifier).restoreFromFirestore(uid: 'uid-1', childId: 'child-1');
 
       final signals = container.read(interestProfileProvider);
       expect(signals[InterestCategoryType.sports]!.score, greaterThan(signals[InterestCategoryType.gaming]!.score));

@@ -9,6 +9,8 @@ import '../../../../core/localization/app_locale.dart';
 import '../../../../core/localization/locale_provider.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/state/auth_controller.dart';
+import '../../../profile/presentation/state/active_child_controller.dart';
+import '../../../profile/presentation/state/children_controller.dart';
 import '../state/settings_providers.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -58,8 +60,8 @@ class SettingsScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: NawaSpacing.xl, vertical: NawaSpacing.md),
           children: [
-            _Row(icon: Icons.person_outline_rounded, label: l10n.settingsProfile, onTap: () => _comingSoon(context, l10n)),
-            _Row(icon: Icons.groups_outlined, label: l10n.settingsChildProfiles, onTap: () => _comingSoon(context, l10n)),
+            _Row(icon: Icons.person_outline_rounded, label: l10n.settingsProfile, onTap: () => context.push(RoutePaths.parentProfile)),
+            _Row(icon: Icons.groups_outlined, label: l10n.settingsChildProfiles, onTap: () => context.push(RoutePaths.childProfiles)),
             _Row(
               icon: Icons.language_rounded,
               label: l10n.settingsLanguage,
@@ -75,7 +77,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             _Row(icon: Icons.shield_outlined, label: l10n.settingsPrivacySafety, onTap: () => _comingSoon(context, l10n)),
             _Row(icon: Icons.help_outline_rounded, label: l10n.settingsHelpSupport, onTap: () => _comingSoon(context, l10n)),
-            _Row(icon: Icons.info_outline_rounded, label: l10n.settingsAboutNawa, onTap: () => _comingSoon(context, l10n)),
+            _Row(icon: Icons.info_outline_rounded, label: l10n.settingsAboutNawa, onTap: () => context.push(RoutePaths.aboutNawa)),
             const SizedBox(height: NawaSpacing.lg),
             _Row(
               icon: Icons.logout_rounded,
@@ -83,6 +85,10 @@ class SettingsScreen extends ConsumerWidget {
               color: NawaColors.error,
               onTap: () async {
                 await ref.read(authControllerProvider.notifier).logout();
+                // Never let a subsequent login silently reuse the previous
+                // parent's child selection.
+                ref.read(activeChildIdProvider.notifier).clear();
+                ref.read(childrenProvider.notifier).clear();
                 if (context.mounted) context.go(RoutePaths.welcome);
               },
             ),

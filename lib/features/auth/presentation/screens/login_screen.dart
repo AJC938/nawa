@@ -11,6 +11,7 @@ import '../../../../core/widgets/mascot/nawa_logo_mark.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../onboarding/domain/onboarding_state.dart';
 import '../../../onboarding/presentation/state/onboarding_controller.dart';
+import '../../../profile/presentation/state/active_child_controller.dart';
 import '../../domain/auth_error_code.dart';
 import '../../domain/auth_state.dart';
 import '../state/auth_controller.dart';
@@ -63,15 +64,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
-    // If this login is completing a just-finished onboarding, persist it to
-    // Firestore before entering the authenticated app.
+    // If this login is completing a just-finished onboarding, persist it
+    // (as a new child) to Firestore before entering the authenticated app.
+    final hadPendingOnboarding = ref.read(onboardingProvider).completed;
     final saved = await ref.read(onboardingProvider.notifier).syncToFirestoreIfNeeded();
     if (!mounted) return;
-    if (saved) {
-      context.go(RoutePaths.parent);
-    } else {
+    if (!saved) {
       setState(() => _serverError = AuthErrorCode.unknown);
+      return;
     }
+    if (hadPendingOnboarding) {
+      // The just-created child is already active.
+      context.go(RoutePaths.parent);
+      return;
+    }
+
+    // A normal returning-parent login: resolve which child (if any) should
+    // become active, or send them to pick/create one.
+    final uid = ref.read(authControllerProvider).user!.uid;
+    final route = await resolveChildEntryRoute(ref, uid);
+    if (!mounted) return;
+    context.go(route);
   }
 
   void _comingSoon() {

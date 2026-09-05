@@ -2,7 +2,9 @@
 class RoutePaths {
   const RoutePaths._();
 
+  static const String splash = '/splash';
   static const String welcome = '/welcome';
+  static const String selectChild = '/select-child';
 
   static const String onboardingIntro = '/onboarding';
   static const String onboardingName = '/onboarding/name';
@@ -45,4 +47,7 @@ class RoutePaths {
   static const String parentChildProfile = '/parent/child-profile';
 
   static const String settings = '/settings';
+  static const String parentProfile = '/settings/parent-profile';
+  static const String childProfiles = '/settings/child-profiles';
+  static const String aboutNawa = '/settings/about';
 }

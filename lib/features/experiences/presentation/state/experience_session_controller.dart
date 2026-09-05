@@ -4,6 +4,7 @@ import '../../../auth/domain/auth_state.dart';
 import '../../../auth/presentation/state/auth_controller.dart';
 import '../../../interests/domain/interest_category.dart';
 import '../../../interests/presentation/state/interest_profile_controller.dart';
+import '../../../profile/presentation/state/active_child_controller.dart';
 import '../../../profile/presentation/state/child_profile_controller.dart';
 import '../../data/exploration_repository.dart';
 import '../../data/mock_experiences.dart';
@@ -62,9 +63,10 @@ class ExperienceSessionController extends Notifier<ExperienceSessionState> {
   Future<void> _startExploration(Experience experience, DateTime startedAt) async {
     final auth = ref.read(authControllerProvider);
     final uid = auth.user?.uid;
-    if (auth.status != AuthStatus.authenticated || uid == null) {
-      // No signed-in owner to attach this exploration to — never write an
-      // orphan record. The local question flow still works.
+    final childId = ref.read(activeChildIdProvider);
+    if (auth.status != AuthStatus.authenticated || uid == null || childId == null) {
+      // No signed-in owner (or no active child) to attach this exploration
+      // to — never write an orphan record. The local question flow still works.
       if (_isCurrentSession(experience.id, startedAt)) {
         state = state.copyWith(explorationStatus: ExplorationStatus.error);
       }
@@ -74,6 +76,7 @@ class ExperienceSessionController extends Notifier<ExperienceSessionState> {
     try {
       final explorationId = await ref.read(explorationRepositoryProvider).startExploration(
             uid: uid,
+            childId: childId,
             experienceId: experience.id,
             categoryId: experience.category.id,
           );
@@ -143,7 +146,8 @@ class ExperienceSessionController extends Notifier<ExperienceSessionState> {
     final explorationId = state.explorationId;
     final auth = ref.read(authControllerProvider);
     final uid = auth.user?.uid;
-    if (explorationId == null || uid == null || auth.status != AuthStatus.authenticated) {
+    final childId = ref.read(activeChildIdProvider);
+    if (explorationId == null || uid == null || childId == null || auth.status != AuthStatus.authenticated) {
       state = state.copyWith(explorationStatus: ExplorationStatus.error);
       return;
     }
@@ -156,6 +160,7 @@ class ExperienceSessionController extends Notifier<ExperienceSessionState> {
       final repository = ref.read(explorationRepositoryProvider);
       await repository.completeExploration(
         uid: uid,
+        childId: childId,
         explorationId: explorationId,
         durationSeconds: durationSeconds,
         interactions: state.interactions,
@@ -167,9 +172,10 @@ class ExperienceSessionController extends Notifier<ExperienceSessionState> {
       // drifts from what's actually stored. Reflects immediately without
       // needing an app restart.
       final selectedInterests = ref.read(childProfileProvider).interests;
-      final explorations = await repository.getExplorations(uid);
+      final explorations = await repository.getExplorations(uid: uid, childId: childId);
       ref.read(explorationHistoryProvider.notifier).setExplorations(explorations);
       ref.read(interestProfileProvider.notifier).recalculate(selectedInterests: selectedInterests, explorations: explorations);
+      ref.read(childProfileProvider.notifier).setExperiencesCompleted(explorations.where((e) => e.completed).length);
     } catch (_) {
       state = state.copyWith(explorationStatus: ExplorationStatus.error);
     }

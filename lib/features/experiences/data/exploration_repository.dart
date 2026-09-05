@@ -5,26 +5,34 @@ import '../domain/exploration_interaction.dart';
 import '../domain/exploration_record.dart';
 
 /// Firestore-backed exploration (experience session) storage, keyed by the
-/// Firebase Auth UID under `users/{uid}/explorations/{explorationId}`. UI
-/// and Riverpod controllers never touch [FirebaseFirestore] directly —
-/// only this repository does.
+/// Firebase Auth UID and the active child under
+/// `users/{uid}/children/{childId}/explorations/{explorationId}` — every
+/// exploration belongs to exactly one child, never shared between
+/// siblings. UI and Riverpod controllers never touch [FirebaseFirestore]
+/// directly — only this repository does.
 abstract class ExplorationRepository {
   /// Creates a new exploration record and returns its generated id, so the
   /// caller can hold onto it and later update the SAME record on completion
   /// rather than creating a second one.
-  Future<String> startExploration({required String uid, required String experienceId, required String categoryId});
+  Future<String> startExploration({
+    required String uid,
+    required String childId,
+    required String experienceId,
+    required String categoryId,
+  });
 
   /// Updates the same exploration record in place — never creates a new one.
   Future<void> completeExploration({
     required String uid,
+    required String childId,
     required String explorationId,
     required int durationSeconds,
     required List<ExplorationInteraction> interactions,
   });
 
-  Future<List<ExplorationRecord>> getExplorations(String uid);
+  Future<List<ExplorationRecord>> getExplorations({required String uid, required String childId});
 
-  Future<List<ExplorationRecord>> getCompletedExperiences(String uid);
+  Future<List<ExplorationRecord>> getCompletedExperiences({required String uid, required String childId});
 }
 
 class FirestoreExplorationRepository implements ExplorationRepository {
@@ -32,12 +40,17 @@ class FirestoreExplorationRepository implements ExplorationRepository {
 
   final FirebaseFirestore _firestore;
 
-  CollectionReference<Map<String, dynamic>> _explorations(String uid) =>
-      _firestore.collection('users').doc(uid).collection('explorations');
+  CollectionReference<Map<String, dynamic>> _explorations(String uid, String childId) =>
+      _firestore.collection('users').doc(uid).collection('children').doc(childId).collection('explorations');
 
   @override
-  Future<String> startExploration({required String uid, required String experienceId, required String categoryId}) async {
-    final doc = _explorations(uid).doc();
+  Future<String> startExploration({
+    required String uid,
+    required String childId,
+    required String experienceId,
+    required String categoryId,
+  }) async {
+    final doc = _explorations(uid, childId).doc();
     await doc.set({
       'experienceId': experienceId,
       'categoryId': categoryId,
@@ -53,11 +66,12 @@ class FirestoreExplorationRepository implements ExplorationRepository {
   @override
   Future<void> completeExploration({
     required String uid,
+    required String childId,
     required String explorationId,
     required int durationSeconds,
     required List<ExplorationInteraction> interactions,
   }) async {
-    await _explorations(uid).doc(explorationId).set({
+    await _explorations(uid, childId).doc(explorationId).set({
       'completed': true,
       'completedAt': FieldValue.serverTimestamp(),
       'durationSeconds': durationSeconds,
@@ -66,14 +80,14 @@ class FirestoreExplorationRepository implements ExplorationRepository {
   }
 
   @override
-  Future<List<ExplorationRecord>> getExplorations(String uid) async {
-    final snapshot = await _explorations(uid).orderBy('startedAt', descending: true).get();
+  Future<List<ExplorationRecord>> getExplorations({required String uid, required String childId}) async {
+    final snapshot = await _explorations(uid, childId).orderBy('startedAt', descending: true).get();
     return snapshot.docs.map(_fromDoc).toList();
   }
 
   @override
-  Future<List<ExplorationRecord>> getCompletedExperiences(String uid) async {
-    final all = await getExplorations(uid);
+  Future<List<ExplorationRecord>> getCompletedExperiences({required String uid, required String childId}) async {
+    final all = await getExplorations(uid: uid, childId: childId);
     return all.where((record) => record.completed).toList();
   }
 

@@ -13,7 +13,7 @@ import '../support/fake_exploration_repository.dart';
 import '../support/fake_user_profile_repository.dart';
 
 void main() {
-  testWidgets('Switching to Arabic flips text direction to RTL and translates chrome text', (tester) async {
+  testWidgets('Arabic is the default locale, and switching to English still works', (tester) async {
     final container = ProviderContainer(
       overrides: [
         authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
@@ -24,16 +24,20 @@ void main() {
     addTearDown(container.dispose);
 
     await tester.pumpWidget(UncontrolledProviderScope(container: container, child: const NawaApp()));
+    // Clear the branded splash's short display timer before settling.
+    await tester.pump(const Duration(milliseconds: 600));
     await tester.pumpAndSettle();
 
-    // English by default: LTR, English welcome copy.
-    expect(Directionality.of(tester.element(find.text('Discover what you love'))), TextDirection.ltr);
-
-    container.read(localeProvider.notifier).setLocale(AppLocale.ar);
-    await tester.pumpAndSettle();
-
-    // Arabic: RTL direction, Arabic welcome copy, no leftover English text.
+    // Arabic-first by default: RTL direction, Arabic welcome copy.
+    expect(container.read(localeProvider), AppLocale.ar);
     expect(Directionality.of(tester.element(find.text('اكتشف ما تحب'))), TextDirection.rtl);
-    expect(find.text('Discover what you love'), findsNothing);
+
+    container.read(localeProvider.notifier).setLocale(AppLocale.en);
+    await tester.pumpAndSettle();
+
+    // English remains fully supported and selectable: LTR, English welcome
+    // copy, no leftover Arabic text.
+    expect(Directionality.of(tester.element(find.text('Discover what you love'))), TextDirection.ltr);
+    expect(find.text('اكتشف ما تحب'), findsNothing);
   });
 }

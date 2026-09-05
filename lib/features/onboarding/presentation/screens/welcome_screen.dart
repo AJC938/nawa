@@ -9,15 +9,26 @@ import '../../../../core/widgets/mascot/nawa_mascot_placeholder.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/auth_state.dart';
 import '../../../auth/presentation/state/auth_controller.dart';
+import '../../../profile/presentation/state/active_child_controller.dart';
 
 class WelcomeScreen extends ConsumerWidget {
   const WelcomeScreen({super.key});
+
+  Future<void> _handleIHaveAnAccount(BuildContext context, WidgetRef ref) async {
+    final auth = ref.read(authControllerProvider);
+    final uid = auth.user?.uid;
+    if (auth.status != AuthStatus.authenticated || uid == null) {
+      context.go(RoutePaths.login);
+      return;
+    }
+    final route = await resolveChildEntryRoute(ref, uid);
+    if (context.mounted) context.go(route);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final isAuthenticated = ref.watch(authControllerProvider).status == AuthStatus.authenticated;
 
     return Scaffold(
       body: SafeArea(
@@ -46,7 +57,7 @@ class WelcomeScreen extends ConsumerWidget {
               ),
               const SizedBox(height: NawaSpacing.md),
               TextButton(
-                onPressed: () => context.go(isAuthenticated ? RoutePaths.parent : RoutePaths.login),
+                onPressed: () => _handleIHaveAnAccount(context, ref),
                 child: Text(l10n.iHaveAnAccount),
               ),
               const SizedBox(height: NawaSpacing.lg),

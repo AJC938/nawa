@@ -25,7 +25,11 @@ import '../../features/parent/presentation/screens/parent_dashboard_screen.dart'
 import '../../features/parent/presentation/screens/parent_interest_detail_screen.dart';
 import '../../features/parent/presentation/screens/parent_interest_summary_screen.dart';
 import '../../features/profile/presentation/screens/child_profile_screen.dart';
+import '../../features/profile/presentation/screens/child_profiles_screen.dart';
+import '../../features/profile/presentation/screens/parent_profile_screen.dart';
+import '../../features/settings/presentation/screens/about_nawa_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/splash/presentation/screens/splash_screen.dart';
 import 'nawa_shell_scaffold.dart';
 import 'route_paths.dart';
 
@@ -35,9 +39,11 @@ import 'route_paths.dart';
 /// shell (no bottom nav), matching the reference UI.
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: RoutePaths.welcome,
+    initialLocation: RoutePaths.splash,
     routes: [
+      GoRoute(path: RoutePaths.splash, builder: (context, state) => const SplashScreen()),
       GoRoute(path: RoutePaths.welcome, builder: (context, state) => const WelcomeScreen()),
+      GoRoute(path: RoutePaths.selectChild, builder: (context, state) => const ChildProfilesScreen(isEntryGate: true)),
 
       GoRoute(path: RoutePaths.onboardingIntro, builder: (context, state) => const OnboardingIntroScreen()),
       GoRoute(path: RoutePaths.onboardingName, builder: (context, state) => const OnboardingNameScreen()),
@@ -100,6 +106,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: RoutePaths.parentChildProfile, builder: (context, state) => const ParentChildProfileScreen()),
 
       GoRoute(path: RoutePaths.settings, builder: (context, state) => const SettingsScreen()),
+      GoRoute(path: RoutePaths.parentProfile, builder: (context, state) => const ParentProfileScreen()),
+      GoRoute(path: RoutePaths.childProfiles, builder: (context, state) => const ChildProfilesScreen()),
+      GoRoute(path: RoutePaths.aboutNawa, builder: (context, state) => const AboutNawaScreen()),
     ],
   );
 });

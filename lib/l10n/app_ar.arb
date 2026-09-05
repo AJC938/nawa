@@ -145,6 +145,19 @@
   "languageEnglish": "الإنجليزية",
   "languageArabic": "العربية",
 
+  "selectChildTitle": "من الذي يستكشف؟",
+  "selectChildSubtitle": "اختر طفلاً للمتابعة، أو أضف طفلاً جديدًا.",
+  "addChild": "إضافة طفل",
+  "noChildProfilesYet": "لا توجد ملفات أطفال بعد.",
+
+  "parentNameLabel": "الاسم",
+  "parentNameHint": "اسمك",
+  "parentEmailLabel": "البريد الإلكتروني",
+  "saveChanges": "حفظ التغييرات",
+  "profileSaved": "تم الحفظ.",
+
+  "aboutNawaBody": "نوى يساعد الأطفال على استكشاف اهتماماتهم من خلال تجارب تفاعلية ممتعة، ويساعد الوالدين على فهم الاهتمامات التي بدأت في الظهور لدى أطفالهم.",
+
   "emptyExperiencesTitle": "لا توجد تجارب بعد.",
   "emptyExperiencesSubtitle": "ابدأ الاستكشاف وسنعرض لك أشياء رائعة لتجربتها!",
   "exploreNow": "استكشف الآن",

@@ -7,16 +7,21 @@ import 'package:nawa/features/auth/data/auth_repository.dart';
 /// Minimal fake [User] — real [User] instances can only come from Firebase,
 /// which isn't initialized in plain widget/unit tests.
 class MockUser extends Mock implements User {
-  MockUser([this._email = 'parent@nawa.app', String? uid]) : _uid = uid ?? 'uid-${_email.hashCode}';
+  MockUser([this._email = 'parent@nawa.app', String? uid, this._displayName])
+      : _uid = uid ?? 'uid-${_email.hashCode}';
 
   final String _email;
   final String _uid;
+  final String? _displayName;
 
   @override
   String get email => _email;
 
   @override
   String get uid => _uid;
+
+  @override
+  String? get displayName => _displayName;
 }
 
 /// In-memory stand-in for [FirebaseAuthRepository]. Lets any test that

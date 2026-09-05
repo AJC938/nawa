@@ -5,7 +5,9 @@ import '../../../auth/presentation/state/auth_controller.dart';
 import '../../../interests/domain/interest_category.dart';
 import '../../../interests/presentation/state/interest_profile_controller.dart';
 import '../../../profile/data/user_profile_repository.dart';
+import '../../../profile/presentation/state/active_child_controller.dart';
 import '../../../profile/presentation/state/child_profile_controller.dart';
+import '../../../profile/presentation/state/children_controller.dart';
 import '../../domain/onboarding_state.dart';
 
 class OnboardingController extends Notifier<OnboardingState> {
@@ -42,10 +44,16 @@ class OnboardingController extends Notifier<OnboardingState> {
 
   void reset() => state = const OnboardingState();
 
-  /// Persists the completed onboarding (parent + child profile) to
-  /// Firestore under the authenticated user's UID. A no-op if onboarding
-  /// hasn't been completed, already synced, or nobody is authenticated yet
-  /// — callers must not write an orphan profile before authentication.
+  /// Persists the completed onboarding as a NEW child under the
+  /// authenticated parent's Firestore account, and makes it the active
+  /// child. A no-op if onboarding hasn't been completed, already synced, or
+  /// nobody is authenticated yet — callers must not write an orphan child
+  /// before authentication.
+  ///
+  /// This is also how an already-authenticated parent adds another child
+  /// later (re-entering this same onboarding wizard from Settings): every
+  /// successful run always creates one new child, it never overwrites an
+  /// existing one, so siblings never collide.
   ///
   /// Returns true if there was nothing to do or the write succeeded; false
   /// only on a genuine write failure, so callers can hold off navigating
@@ -62,9 +70,16 @@ class OnboardingController extends Notifier<OnboardingState> {
       final child = ref.read(childProfileProvider);
       final repository = ref.read(userProfileRepositoryProvider);
       await repository.createOrUpdateUserProfile(uid: user.uid, email: user.email ?? '');
-      await repository.createOrUpdateChildProfile(uid: user.uid, name: child.name, age: child.age);
-      await repository.saveInterests(uid: user.uid, interests: state.selectedInterests);
-      state = state.copyWith(syncStatus: OnboardingSyncStatus.synced);
+      final childId = await repository.createChild(uid: user.uid, name: child.name, age: child.age, interests: child.interests);
+      await ref.read(activeChildIdProvider.notifier).selectChild(uid: user.uid, childId: childId);
+      await ref.read(childrenProvider.notifier).loadChildren(user.uid);
+      // This wizard run's data is now fully persisted (as the new child,
+      // already active) — fully reset back to the fresh default rather than
+      // leaving completed/synced flags set. Otherwise a LATER, unrelated
+      // login later in the same app session would misread this stale
+      // "just completed onboarding" state and wrongly skip the normal
+      // (zero/one/many-children) sign-in resolution.
+      state = const OnboardingState();
       return true;
     } catch (_) {
       state = state.copyWith(syncStatus: OnboardingSyncStatus.error);

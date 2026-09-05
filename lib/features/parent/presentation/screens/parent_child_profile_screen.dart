@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../app/router/route_paths.dart';
 import '../../../../app/theme/nawa_colors.dart';
 import '../../../../app/theme/nawa_spacing.dart';
 import '../../../../core/widgets/chips/interest_chip.dart';
@@ -80,7 +82,7 @@ class ParentChildProfileScreen extends ConsumerWidget {
               leading: const Icon(Icons.swap_horiz_rounded, color: NawaColors.textSecondary),
               title: Text(l10n.settingsChildProfiles, style: theme.textTheme.bodyLarge),
               trailing: const Icon(Icons.chevron_right_rounded, color: NawaColors.textMuted),
-              onTap: comingSoon,
+              onTap: () => context.push(RoutePaths.childProfiles),
             ),
           ],
         ),

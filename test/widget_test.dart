@@ -27,9 +27,11 @@ void main() {
         child: const NawaApp(),
       ),
     );
+    // Clear the branded splash's short display timer before settling.
+    await tester.pump(const Duration(milliseconds: 600));
     await tester.pumpAndSettle();
 
     expect(find.byType(NawaApp), findsOneWidget);
-    expect(find.text('Start Exploring'), findsOneWidget);
+    expect(find.text('ابدأ الاستكشاف'), findsOneWidget);
   });
 }

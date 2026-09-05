@@ -27,21 +27,24 @@ class ChildProfileController extends Notifier<ChildProfile> {
   }
 
   /// Restores the real child name/age/interests from Firestore for the
-  /// authenticated [uid]. Leaves name/age untouched (e.g. the default) when
+  /// given [uid]'s [childId] — the currently active child, never any
+  /// sibling's data. Leaves name/age untouched (e.g. the default) when
   /// there's no saved profile yet, but always recalculates the real
   /// interest profile (via [InterestProfileController.recalculate]) from
-  /// whatever interests + exploration records are actually saved — this is
-  /// the "load real data" entry point the deterministic scoring engine
-  /// depends on, replacing any pre-Firestore local profile wholesale.
-  Future<void> restoreFromFirestore(String uid) async {
+  /// whatever interests + exploration records are actually saved for THIS
+  /// child — this is the "load real data" entry point the deterministic
+  /// scoring engine depends on, replacing any pre-Firestore local profile
+  /// wholesale.
+  Future<void> restoreFromFirestore({required String uid, required String childId}) async {
     final repository = ref.read(userProfileRepositoryProvider);
-    final record = await repository.getChildProfile(uid);
-    final interests = await repository.getInterests(uid);
-    final explorations = await ref.read(explorationRepositoryProvider).getExplorations(uid);
+    final record = await repository.getChild(uid: uid, childId: childId);
+    final interests = await repository.getChildInterests(uid: uid, childId: childId);
+    final explorations = await ref.read(explorationRepositoryProvider).getExplorations(uid: uid, childId: childId);
 
+    final completedCount = explorations.where((e) => e.completed).length;
     state = record != null
-        ? state.copyWith(name: record.name, age: record.age, interests: interests)
-        : state.copyWith(interests: interests);
+        ? state.copyWith(name: record.name, age: record.age, interests: interests, experiencesCompleted: completedCount)
+        : state.copyWith(interests: interests, experiencesCompleted: completedCount);
     // Cache the raw records once so the recommendation engine can reuse
     // them without a second Firestore read.
     ref.read(explorationHistoryProvider.notifier).setExplorations(explorations);

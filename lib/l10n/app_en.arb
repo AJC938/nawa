@@ -156,6 +156,19 @@
   "languageEnglish": "English",
   "languageArabic": "Arabic",
 
+  "selectChildTitle": "Who's exploring?",
+  "selectChildSubtitle": "Choose a child to continue, or add a new one.",
+  "addChild": "Add Child",
+  "noChildProfilesYet": "No child profiles yet.",
+
+  "parentNameLabel": "Name",
+  "parentNameHint": "Your name",
+  "parentEmailLabel": "Email",
+  "saveChanges": "Save Changes",
+  "profileSaved": "Saved.",
+
+  "aboutNawaBody": "Nawa helps children explore their interests through fun, interactive experiences, and helps parents understand the interests that are emerging in their child along the way.",
+
   "emptyExperiencesTitle": "No experiences yet.",
   "emptyExperiencesSubtitle": "Start exploring and we'll show you amazing things to try!",
   "exploreNow": "Explore Now",

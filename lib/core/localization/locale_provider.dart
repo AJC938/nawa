@@ -5,11 +5,11 @@ import 'app_locale.dart';
 
 /// Holds the app's active locale and exposes it for locale switching.
 ///
-/// Defaults to English. The next phase can wire this to a persisted
-/// user/device preference.
+/// Nawa is Arabic-first, so Arabic is the default locale on a fresh
+/// launch; English remains fully supported and selectable from Settings.
 class LocaleNotifier extends Notifier<Locale> {
   @override
-  Locale build() => AppLocale.en;
+  Locale build() => AppLocale.ar;
 
   void setLocale(Locale locale) {
     if (!AppLocale.supported.contains(locale)) return;

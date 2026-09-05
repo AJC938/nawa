@@ -6,10 +6,23 @@ import 'package:nawa/features/experiences/domain/experience_session_state.dart';
 import 'package:nawa/features/experiences/presentation/state/experience_session_controller.dart';
 import 'package:nawa/features/interests/domain/interest_category.dart';
 import 'package:nawa/features/interests/presentation/state/interest_profile_controller.dart';
+import 'package:nawa/features/profile/presentation/state/active_child_controller.dart';
 import 'package:nawa/features/profile/presentation/state/child_profile_controller.dart';
 
 import '../support/fake_auth_repository.dart';
 import '../support/fake_exploration_repository.dart';
+
+const _childId = 'child-1';
+
+/// Fixes the active child without the real [ActiveChildController.selectChild]
+/// side effect (a Firestore restore) — these tests only care about the
+/// exploration-session flow, not profile restoration.
+class _FixedActiveChild extends ActiveChildController {
+  _FixedActiveChild(this._id);
+  final String? _id;
+  @override
+  String? build() => _id;
+}
 
 void main() {
   group('ExperienceSessionController', () {
@@ -24,6 +37,7 @@ void main() {
       final c = ProviderContainer(overrides: [
         authRepositoryProvider.overrideWithValue(authRepository),
         explorationRepositoryProvider.overrideWithValue(explorationRepository),
+        if (signedIn) activeChildIdProvider.overrideWith(() => _FixedActiveChild(_childId)),
       ]);
       addTearDown(c.dispose);
       return c;
@@ -122,7 +136,7 @@ void main() {
         expect(state.explorationId, isNotNull);
         expect(state.explorationStatus, ExplorationStatus.inProgress);
 
-        final records = await explorationRepository.getExplorations('uid-1');
+        final records = await explorationRepository.getExplorations(uid: 'uid-1', childId: _childId);
         expect(records, hasLength(1));
         expect(records.first.experienceId, 'space-adventure');
         expect(records.first.categoryId, 'gaming');
@@ -174,7 +188,7 @@ void main() {
         await Future<void>.delayed(Duration.zero);
 
         expect(explorationRepository.startCallCount, 1);
-        final records = await explorationRepository.getExplorations('uid-1');
+        final records = await explorationRepository.getExplorations(uid: 'uid-1', childId: _childId);
         expect(records, hasLength(1));
         final record = records.single;
         expect(record.id, startedId);
@@ -229,7 +243,7 @@ void main() {
 
         expect(container.read(experienceSessionProvider).explorationStatus, ExplorationStatus.completed);
         expect(explorationRepository.startCallCount, 1);
-        final records = await explorationRepository.getExplorations('uid-1');
+        final records = await explorationRepository.getExplorations(uid: 'uid-1', childId: _childId);
         expect(records, hasLength(1));
         expect(records.single.completed, isTrue);
       });
@@ -248,12 +262,19 @@ void main() {
   group('ExplorationRepository read/restore', () {
     test('getCompletedExperiences only returns completed records', () async {
       final repository = FakeExplorationRepository();
-      final startedId = await repository.startExploration(uid: 'uid-1', experienceId: 'exp-a', categoryId: 'gaming');
-      await repository.startExploration(uid: 'uid-1', experienceId: 'exp-b', categoryId: 'sports');
-      await repository.completeExploration(uid: 'uid-1', explorationId: startedId, durationSeconds: 42, interactions: const []);
+      final startedId =
+          await repository.startExploration(uid: 'uid-1', childId: 'child-1', experienceId: 'exp-a', categoryId: 'gaming');
+      await repository.startExploration(uid: 'uid-1', childId: 'child-1', experienceId: 'exp-b', categoryId: 'sports');
+      await repository.completeExploration(
+        uid: 'uid-1',
+        childId: 'child-1',
+        explorationId: startedId,
+        durationSeconds: 42,
+        interactions: const [],
+      );
 
-      final all = await repository.getExplorations('uid-1');
-      final completed = await repository.getCompletedExperiences('uid-1');
+      final all = await repository.getExplorations(uid: 'uid-1', childId: 'child-1');
+      final completed = await repository.getCompletedExperiences(uid: 'uid-1', childId: 'child-1');
 
       expect(all, hasLength(2));
       expect(completed, hasLength(1));
@@ -263,16 +284,30 @@ void main() {
 
     test('a different uid never sees another user\'s exploration records', () async {
       final repository = FakeExplorationRepository();
-      await repository.startExploration(uid: 'uid-a', experienceId: 'exp-a', categoryId: 'gaming');
-      await repository.startExploration(uid: 'uid-b', experienceId: 'exp-b', categoryId: 'sports');
+      await repository.startExploration(uid: 'uid-a', childId: 'child-1', experienceId: 'exp-a', categoryId: 'gaming');
+      await repository.startExploration(uid: 'uid-b', childId: 'child-1', experienceId: 'exp-b', categoryId: 'sports');
 
-      final forA = await repository.getExplorations('uid-a');
-      final forB = await repository.getExplorations('uid-b');
+      final forA = await repository.getExplorations(uid: 'uid-a', childId: 'child-1');
+      final forB = await repository.getExplorations(uid: 'uid-b', childId: 'child-1');
 
       expect(forA, hasLength(1));
       expect(forA.single.experienceId, 'exp-a');
       expect(forB, hasLength(1));
       expect(forB.single.experienceId, 'exp-b');
+    });
+
+    test('siblings under the SAME parent uid never see each other\'s exploration records', () async {
+      final repository = FakeExplorationRepository();
+      await repository.startExploration(uid: 'uid-1', childId: 'lamar', experienceId: 'exp-gaming', categoryId: 'gaming');
+      await repository.startExploration(uid: 'uid-1', childId: 'sara', experienceId: 'exp-art', categoryId: 'art');
+
+      final lamar = await repository.getExplorations(uid: 'uid-1', childId: 'lamar');
+      final sara = await repository.getExplorations(uid: 'uid-1', childId: 'sara');
+
+      expect(lamar, hasLength(1));
+      expect(lamar.single.experienceId, 'exp-gaming');
+      expect(sara, hasLength(1));
+      expect(sara.single.experienceId, 'exp-art');
     });
   });
 }

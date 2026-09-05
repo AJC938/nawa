@@ -7,9 +7,33 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
 
-      // A parent may only read/write their own child's exploration
-      // (experience session) records, same ownership model as the parent doc.
+      // Legacy (pre-multi-child) exploration records, kept only so old
+      // data stays readable/migratable — same ownership model as the
+      // parent doc. New writes always go under children/{childId} below.
       match /explorations/{explorationId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // A parent may only read/write their own children, and each child's
+      // own exploration (experience session) records — same UID ownership
+      // model, one level deeper. A sibling can never read another
+      // sibling's data because both live under the same parent-owned path.
+      match /children/{childId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+
+        match /explorations/{explorationId} {
+          allow read, write: if request.auth != null && request.auth.uid == userId;
+        }
+      }
+
+      // FCM device tokens and login-notification events: same UID
+      // ownership model — a parent only ever sees their own devices/events.
+      // Cloud Functions (admin SDK) bypass these rules entirely to read
+      // tokens and write notificationSent on explorations.
+      match /fcmTokens/{tokenId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+      match /notificationEvents/{eventId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }

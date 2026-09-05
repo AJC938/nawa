@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nawa/app/app.dart';
+import 'package:nawa/core/localization/app_locale.dart';
+import 'package:nawa/core/localization/locale_provider.dart';
 import 'package:nawa/features/auth/data/auth_repository.dart';
 import 'package:nawa/features/experiences/data/exploration_repository.dart';
 import 'package:nawa/features/profile/data/user_profile_repository.dart';
@@ -9,6 +11,14 @@ import 'package:nawa/features/profile/data/user_profile_repository.dart';
 import '../support/fake_auth_repository.dart';
 import '../support/fake_exploration_repository.dart';
 import '../support/fake_user_profile_repository.dart';
+
+/// This flow asserts on English UI text throughout — it's testing the
+/// functional flow, not localization — so it pins the locale to English
+/// even though Arabic is now the app's real default.
+class _FixedEnglishLocale extends LocaleNotifier {
+  @override
+  Locale build() => AppLocale.en;
+}
 
 /// Covers state-flow-test steps 8-16: Home -> Experience -> Completion ->
 /// My Interests, and verifies completing an experience actually changes
@@ -20,10 +30,13 @@ Future<void> _completeOnboarding(WidgetTester tester) async {
         authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
         userProfileRepositoryProvider.overrideWithValue(FakeUserProfileRepository()),
         explorationRepositoryProvider.overrideWithValue(FakeExplorationRepository()),
+        localeProvider.overrideWith(() => _FixedEnglishLocale()),
       ],
       child: const NawaApp(),
     ),
   );
+  // Clear the branded splash's short display timer before settling.
+  await tester.pump(const Duration(milliseconds: 600));
   await tester.pumpAndSettle();
 
   await tester.tap(find.text('Start Exploring'));
