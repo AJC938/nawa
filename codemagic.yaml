@@ -10,6 +10,9 @@ workflows:
       - name: Set up Firebase Android config
         script: |
           echo "$GOOGLE_SERVICES_JSON" | base64 --decode > "$CM_BUILD_DIR/android/app/google-services.json"
+      - name: Set up Firebase Dart options
+        script: |
+          echo "$FIREBASE_OPTIONS_DART" | base64 --decode > "$CM_BUILD_DIR/lib/firebase_options.dart"
       - name: Get Flutter packages
         script: |
           flutter packages pub get
