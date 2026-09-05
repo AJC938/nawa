@@ -1,0 +1,24 @@
+workflows:
+  nawa-workflow:
+    name: Nawa Workflow
+    max_build_duration: 60
+    environment:
+      groups:
+        - firebase_credentials
+      flutter: stable
+    scripts:
+      - name: Set up Firebase Android config
+        script: |
+          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > "$CM_BUILD_DIR/android/app/google-services.json"
+      - name: Get Flutter packages
+        script: |
+          flutter packages pub get
+      - name: Build Android
+        script: |
+          flutter build appbundle --debug
+      - name: Build iOS
+        script: |
+          flutter build ios --debug --no-codesign
+    artifacts:
+      - build/**/outputs/**/*.aab
+      - build/ios/iphoneos/*.app
