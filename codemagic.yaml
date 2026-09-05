@@ -21,7 +21,7 @@ workflows:
           flutter build appbundle --debug
       - name: Build iOS
         script: |
-          flutter build ios --debug --no-codesign
+          flutter build ios --release --no-codesign
     artifacts:
       - build/**/outputs/**/*.aab
       - build/ios/iphoneos/*.app
